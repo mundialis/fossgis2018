@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>mundialis FOSSGIS 2018 - workshop - open data mit open source</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="../index.css">
+  <link rel="stylesheet" href="resources/open_data_mit_open_source.css">
+
+  <link rel="shortcut icon" href="../resources/img/mundialis_bildmarke_web.ico" type="image/x-icon" />
+  <script src="../resources/js/toggle_nav.js" ></script>
+  <script src="../resources/js/w3data.js"></script>
+
+</head>
+<body>
+  <a href="https://www.mundialis.de"><img id="logo" src="../resources/img/mundialis_logo.png" alt="Logo from mundialis" width="100" /></a>
+  <button class="navbtn" onclick="toogleNav()"></button>
+
+  <div w3-include-html="html-includes/nav.html"></div>
+  <script>w3IncludeHTML();</script>
+
+  <main>
+    <h1 class="title">Open data mit Open source - Prozessierung von Copernicus Daten mit freier (Kommandozeilen-) Software</h1>
+    <h2>Sentinel-2 Szenen automatisiert herunterladen</h2>
+
+
+    <h3>Search & Download</h3>
+
+    <p>Es gibt viele verschiedene Tools. Eine kleine Auswahl:</p>
+
+    <ul>
+      <li>sentinelsat - benötigt ESA Registrierung, einfach zu installieren und zu benutzen. Filtern in Zeit und Raum mittels Kommandozeile oder innerhalb eines Python-Skriptes</li>
+      <li>awsdownload - geschrieben in java</li>
+      <li>sentinelhub - einfach zu installieren und benutzen, fragt Sentinel Archiv auf AWS an und packt bei Bedarf wieder SAFE-Format</li>
+    </ul>
+
+    <p> Siehe auch: <a href="https://github.com/Fernerkundung/awesome-sentinel">https://github.com/Fernerkundung/awesome-sentinel</a></p>
+
+  </main>
+</body>
+</html>

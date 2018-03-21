@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>mundialis FOSSGIS 2018 - workshop - open data mit open source</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="../index.css">
+  <link rel="stylesheet" href="resources/open_data_mit_open_source.css">
+  <link rel="shortcut icon" href="../resources/img/mundialis_bildmarke_web.ico" type="image/x-icon" />
+  <script src="../resources/js/toggle_nav.js" ></script>
+  <script src="../resources/js/w3data.js"></script>
+
+</head>
+<body>
+  <a href="https://www.mundialis.de"><img id="logo" src="../resources/img/mundialis_logo.png" alt="Logo from mundialis" width="100" /></a>
+  <button class="navbtn" onclick="toogleNav()"></button>
+
+  <div w3-include-html="html-includes/nav.html"></div>
+  <script>w3IncludeHTML();</script>
+
+  <main>
+    <h1 class="title">Open data mit Open source - Prozessierung von Copernicus Daten mit freier (Kommandozeilen-) Software</h1>
+    <h2>Sentinel-2 Szenen filtern</h2>
+
+
+
+    <h3>Programmatisch mit CURL</h3>
+
+  </br></br>
+  <h4>ESA: <a href="https://scihub.copernicus.eu/">https://scihub.copernicus.eu/</a> (registrierung notwendig)</h4>
+  <ul>
+    <li><b>Dokumentation</b>: <a href="https://scihub.copernicus.eu/userguide/5APIsAndBatchScripting">https://scihub.copernicus.eu/userguide/5APIsAndBatchScripting</a></li>
+    <li><b>OData Beispiel</b>:
+      <a href="https://scihub.copernicus.eu/apihub/odata/v1/Products?$select=Id&$filter=substringof(%27S2%27,Name)%20and%20year(IngestionDate)%20eq%202018%20and%20month(IngestionDate)%20eq%201">https://scihub.copernicus.eu/apihub/odata/v1/Products?$filter=substringof('S2',Name) and year(IngestionDate) eq 2018 and month(IngestionDate) eq 1</a>
+    </li>
+    <li><b>OpenSearch Beispiel</b>:
+      <a href="https://scihub.copernicus.eu/apihub/search?q=footprint:%22Intersects(POLYGON((-4.53%2029.85,26.75%2029.85,26.75%2046.80,-4.53%2046.80,-4.53%2029.85)))%22">https://scihub.copernicus.eu/apihub/search?q=footprint:"Intersects(POLYGON((-4.53 29.85,26.75 29.85,26.75 46.80,-4.53 46.80,-4.53 29.85)))"</a>
+      <a href="https://scihub.copernicus.eu/dhus/search?q=ingestiondate:%5bNOW-1DAY%20TO%20NOW%5d">https://scihub.copernicus.eu/dhus/search?q=ingestiondate:[NOW-1DAY TO NOW]</a>
+    </li>
+  </ul>
+
+</br></br>
+<h4>EO-me: <a href="https://eome.mundialis.de"><b>eome.mundialis.de</b></a> via OpenSearch</h4>
+<ul><li><b>Dokumentation</b>: <a href="https://eome.mundialis.de//eomedocs/opensearch.html">https://eome.mundialis.de//eomedocs/opensearch.html</a></li>
+  <li><b>Beispiel 1</b>: <a href="https://eome.mundialis.de/eome/opensearch.action?q=BBOX(wkb_geometry,16.005,48.0408,16.7686,48.4585,%27EPSG:4326%27)%20AND%20satellite=%27sentinel2%27%20AND%20sensing_time%20BETWEEN%202017-05-10%20AND%202017-09-14%20AND%20cloudcover%20%3C%2010&format=application/json&startIndex=0&count=10">https://eome.mundialis.de/eome/opensearch.action?q=BBOX(wkb_geometry,16.005,48.0408,16.7686,48.4585,%27EPSG:4326%27)%20AND%20satellite=%27sentinel2%27%20AND%20sensing_time%20BETWEEN%202017-05-10%20AND%202017-09-14%20AND%20cloudcover%20%3C%2010&format=application/json&startIndex=0&count=10</a></li>
+  <li><b>Beispiel 2</b>: <a href="https://eome.mundialis.de/eome/opensearch.action?q=satellite=%27sentinel2%27%20AND%20sensing_time%20BETWEEN%202017-05-10%20AND%202017-09-14%20%20AND%20dem_gmted%20%3E%201000&startIndex=0&count=10">https://eome.mundialis.de/eome/opensearch.action?q=satellite=%27sentinel2%27%20AND%20sensing_time%20BETWEEN%202017-05-10%20AND%202017-09-14%20%20AND%20dem_gmted%20%3E%201000&startIndex=0&count=10</a></li>
+</ul>
+
+</br></br>
+<h4>CODE-DE: <a href="https://code-de.org/de">https://code-de.org/de</a> via OpenSearch</h4>
+<ul>
+  <li><b>OpenSearch Beschreibung</b>: <a href="https://catalog.code-de.org:443/opensearch/description.xml">https://catalog.code-de.org:443/opensearch/description.xml</a>
+    <li><b>Beispiel</b>: <a href="https://catalog.code-de.org/opensearch/request?parentIdentifier=EOP:CODE-DE:S2_MSI_L1C&maximumRecords=1">https://catalog.code-de.org/opensearch/request?parentIdentifier=EOP:CODE-DE:S2_MSI_L1C&maximumRecords=1</a></li>
+  </ul>
+
+</br></br>
+
+<h3>Programmatisch</h3>
+
+<ul><li><b>sentinelsat</b> (siehe nächstes Kapitel)</li></ul>
+
+
+</main>
+</body>
+</html>

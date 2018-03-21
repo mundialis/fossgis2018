@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>mundialis FOSSGIS 2018 - workshop - open data mit open source</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="../index.css">
+  <link rel="stylesheet" href="resources/open_data_mit_open_source.css">
+
+  <link rel="shortcut icon" href="../resources/img/mundialis_bildmarke_web.ico" type="image/x-icon" />
+  <script src="../resources/js/toggle_nav.js" ></script>
+  <script src="../resources/js/w3data.js"></script>
+
+</head>
+<body>
+  <a href="https://www.mundialis.de"><img id="logo" src="../resources/img/mundialis_logo.png" alt="Logo from mundialis" width="100" /></a>
+  <button class="navbtn" onclick="toogleNav()"></button>
+
+  <div w3-include-html="html-includes/nav.html"></div>
+  <script>w3IncludeHTML();</script>
+
+  <main>
+    <h1 class="title">Open data mit Open source - Prozessierung von Copernicus Daten mit freier (Kommandozeilen-) Software</h1>
+    <h2>Sentinel-2 Szenen automatisiert herunterladen</h2>
+
+    <h3>sentinelsat</h3>
+
+    <p>Was ist <a href="https://github.com/sentinelsat/sentinelsat">sentinelsat</a>?</p>
+    <blockquote>Sentinelsat makes searching, downloading and retrieving the metadata of Sentinel satellite images from the Copernicus Open Access Hub easy.</blockquote>
+
+    <ol>
+      <li><a href="https://scihub.copernicus.eu/userguide/1SelfRegistration">Registrierung</a> bei <a href="https://scihub.copernicus.eu/">Copernicus Open Access Hub</a> (via Open Hub) notwendig</li>
+      <li>Erstellung des Interessensgebietes mit <a href="http://geojson.io">geojson.io</a> und speichern des JSONs in einer Datei.</li>
+      <li>Installation von sentinelsat mit <pre><code>pip install sentinelsat</code></pre></li>
+      <li>Filtern und Download mit sentinelsat. Siehe auch <a href="http://sentinelsat.readthedocs.io/en/stable/cli.html#quickstart">Dokumentation</a></li>
+    </ol>
+
+    <pre><code>
+      DATA_DIR=/home/user/Desktop/open_data_mit_open_source/
+      USER=xxx
+      PASSWORD=yyy
+      JSON=bonn.json
+
+      mkdir -p ${DATA_DIR}
+
+      sentinelsat -u ${USER} -p ${PASSWORD} -g ${JSON} --sentinel 2 --cloud 10 -s 20170601 -e 20170901
+
+      sentinelsat -u ${USER} -p ${PASSWORD} --uuid 1e339b20-144a-4ccf-8ace-36077508b155
+
+      sentinelsat -u ${USER} -p ${PASSWORD} --name S2A_MSIL1C_20170619T103021_N0205_R108_T32ULB_20170619T103021 -d --path ${DATA_DIR}
+    </code></pre>
+
+  </main>
+</body>
+</html>

@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>mundialis FOSSGIS 2018 - workshop - open data mit open source</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="../index.css">
+  <link rel="stylesheet" href="resources/open_data_mit_open_source.css">
+
+  <link rel="shortcut icon" href="../resources/img/mundialis_bildmarke_web.ico" type="image/x-icon" />
+  <script src="../resources/js/toggle_nav.js" ></script>
+  <script src="../resources/js/w3data.js"></script>
+
+</head>
+<body>
+  <a href="https://www.mundialis.de"><img id="logo" src="../resources/img/mundialis_logo.png" alt="Logo from mundialis" width="100" /></a>
+  <button class="navbtn" onclick="toogleNav()"></button>
+
+  <div w3-include-html="html-includes/nav.html"></div>
+  <script>w3IncludeHTML();</script>
+
+  <main>
+    <h1 class="title">Open data mit Open source - Prozessierung von Copernicus Daten mit freier (Kommandozeilen-) Software</h1>
+    <h2>Atmosphärenkorrektur</h2>
+
+    <p>Aus Zeitgründen werden wir hier keine Atmosphärenkorrektur durchführen, sondern von der ESA bereitgestellte L2A Daten verwenden.</p>
+
+    <p>Auch hier gibt es verschiedene Tools:</p>
+
+    <ul>
+      <li><b>sen2cor</b> ist ein Plugin für SNAP. Es gibt es aber auch als isolierters Kommandozeilentool</li>
+      <li><b>i.atcorr</b> - <a href="">i.atcorr</a> ist ein Modul in GRASS GIS</li>
+      <li><b>arcsi</b> - <a href="https://www.arcsi.remotesensing.info/">arcsi</a> ist als Dockerimage verfügbar:
+        <ul>
+          <li><a href="https://hub.docker.com/r/mundialis/arcsi">https://hub.docker.com/r/mundialis/arcsi</a></li>
+          <li><code>docker pull mundialis/arcsi</code></li>
+          <li><code>docker run -t mundialis/arcsi arcsi.py -h</code></li>
+          <li><pre><code>
+            # define name of Sentinel-2 scene - note: omit: .SAFE
+            S2IMG=S2A_MSIL1C_20170327T105021_N0204_R051_T31UFT_20170327T105021
+            DEM=srtm_30m_myregion.tif
+            OUTDIR=arcsi_output_AOT_inv
+            TMPDIR=~/tmp/arcsi
+
+            # Note:
+            #   remove RAD entry below to not keep this tmp dataset
+
+            cd ${S2IMG}.SAFE/
+            mkdir ${TMPDIR}
+
+            # simple DOS1 correction example
+            arcsi.py --sensor sen2 -i MTD_MSIL1C.xml -o ${OUTDIR} \
+            --tmpath ${TMPDIR} -f KEA --stats -p RAD DOSAOTSGL SREF \
+            --aeroimg ${CONDA_PREFIX}/share/arcsi/WorldAerosolParams.kea \
+            --atmosimg ${CONDA_PREFIX}/share/arcsi/WorldAtmosphereParams.kea \
+            --dem ${DEM} --minaot 0.05 --maxaot 0.6 --simpledos
+          </code></pre></li>
+        </ul>
+      </li>
+    </ul>
+
+
+  </main>
+</body>
+</html>

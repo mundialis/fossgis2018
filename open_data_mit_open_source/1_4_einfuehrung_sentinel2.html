@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>mundialis FOSSGIS 2018 - workshop - open data mit open source</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="../index.css">
+  <link rel="stylesheet" href="resources/open_data_mit_open_source.css">
+
+  <link rel="shortcut icon" href="../resources/img/mundialis_bildmarke_web.ico" type="image/x-icon" />
+  <script src="../resources/js/toggle_nav.js" ></script>
+  <script src="../resources/js/w3data.js"></script>
+
+</head>
+<body>
+  <a href="https://www.mundialis.de"><img id="logo" src="../resources/img/mundialis_logo.png" alt="Logo from mundialis" width="100" /></a>
+  <button class="navbtn" onclick="toogleNav()"></button>
+
+  <div w3-include-html="html-includes/nav.html"></div>
+  <script>w3IncludeHTML();</script>
+
+  <main>
+    <h1 class="title">Open data mit Open source - Prozessierung von Copernicus Daten mit freier (Kommandozeilen-) Software</h1>
+    <h2>Einführung</h2>
+
+
+    <h3>Sentinel-2</h3>
+    <ul>
+      <li>Momentan S2A und S2B</li>
+      <li>Land und Küste</li>
+      <li>Überflug alle 5 Tage über Europa, Afrika und Grönland, Rest der Welt alle 10 Tage</li>
+    </ul>
+
+    <p>Multispektrales Instrument mit 13 Kanälen:</p>
+    <img class="blockimg" src="resources/img/Sentinel2_bands.jpg" alt="Sentinel-2 Bänder"><!-- http://www.digital-geography.com/wp-content/uploads/2013/11/Sentinel2_bands-1024x531.jpg -->
+    <img class="blockimg" src="http://www.mdpi.com/remotesensing/remotesensing-08-00166/article_deploy/html/images/remotesensing-08-00166-g002-1024.png" alt="Sentinel-2 Bänder">
+
+    <h3>Daten</h3>
+    <b>L1C</b>: radiometrisch und geometrisch korrigierte TOA (Top Of Atmosphere), orthorektifiziert und räumlich registriert auf einem globalen CRS<br>
+    <b>L2A</b>: Bottom-Of-Atmosphere (BOA) korrigiert, teilweise von ESA bereitgestellt (bisher nur Europa)<br>
+    <br>
+    <b>JPEG2000</b> verlustfrei komprimierte Bilder mit zugehörigen Metadaten, alles verpackt im <b>SAFE</b> Format
+
+
+  </main>
+
+</body>
+</html>

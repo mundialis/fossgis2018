@@ -29,24 +29,26 @@
 
     <ol>
       <li><a href="https://scihub.copernicus.eu/userguide/1SelfRegistration">Registrierung</a> bei <a href="https://scihub.copernicus.eu/">Copernicus Open Access Hub</a> (via Open Hub) notwendig</li>
-      <li>Erstellung des Interessensgebietes mit <a href="http://geojson.io">geojson.io</a> und speichern des JSONs in einer Datei.</li>
+      <li>Erstellung des Interessensgebietes mit <a href="http://geojson.io">geojson.io</a> und speichern des JSONs in einer Datei. Alternativ kann das Gebiet Bonn herunterladen werden mit dem Befehl
+      <pre><code>curl https://mundialis.github.io/fossgis2018/open_data_mit_open_source/processing/bonn.json > bonn.json</code></pre></li>
       <li>Installation von sentinelsat mit <pre><code>pip install sentinelsat</code></pre></li>
       <li>Filtern und Download mit sentinelsat. Siehe auch <a href="http://sentinelsat.readthedocs.io/en/stable/cli.html#quickstart">Dokumentation</a></li>
     </ol>
 
     <pre><code>
-      DATA_DIR=/home/user/Desktop/open_data_mit_open_source/
+      WORK_DIR=/home/user/Desktop/open_data_mit_open_source/
       USER=xxx
       PASSWORD=yyy
       JSON=bonn.json
 
-      mkdir -p ${DATA_DIR}
+      mkdir -p ${WORK_DIR}
+      cd ${WORK_DIR}
 
       sentinelsat -u ${USER} -p ${PASSWORD} -g ${JSON} --sentinel 2 --cloud 10 -s 20170601 -e 20170901
 
       sentinelsat -u ${USER} -p ${PASSWORD} --uuid 1e339b20-144a-4ccf-8ace-36077508b155
 
-      sentinelsat -u ${USER} -p ${PASSWORD} --name S2A_MSIL2A_20170619T103021_N0205_R108_T32ULB_20170619T103021 -d --path ${DATA_DIR}
+      sentinelsat -u ${USER} -p ${PASSWORD} --name S2A_MSIL2A_20170619T103021_N0205_R108_T32ULB_20170619T103021 -d --path ${WORK_DIR}
     </code></pre>
 
   </main>

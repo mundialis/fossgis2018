@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>mundialis FOSSGIS 2018 - workshop - open data mit open source</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="../index.css">
+  <link rel="stylesheet" href="resources/open_data_mit_open_source.css">
+
+  <link rel="shortcut icon" href="../resources/img/mundialis_bildmarke_web.ico" type="image/x-icon" />
+  <script src="../resources/js/toggle_nav.js" ></script>
+  <script src="../resources/js/w3data.js"></script>
+
+</head>
+<body>
+  <a href="https://www.mundialis.de"><img id="logo" src="../resources/img/mundialis_logo.png" alt="Logo from mundialis" width="100" /></a>
+  <button class="navbtn" onclick="toogleNav()"></button>
+
+  <div w3-include-html="html-includes/nav.html"></div>
+  <script>w3IncludeHTML();</script>
+
+  <main>
+    <h1 class="title">Open data mit Open source - Prozessierung von Copernicus Daten mit freier (Kommandozeilen-) Software</h1>
+    <h2>Ergebnisse</h2>
+
+    <div class="flexparent">
+      <a class="flexchild flexchildhalf">
+        <img class="fleximg" src="resources/img/composite.jpeg">
+      </a>
+      <a class="flexchild flexchildhalf">
+        <img class="fleximg" src="resources/img/index.jpeg">
+      </a>
+    </div>
+
+</br></br>
+    <p>Unsere Ergebnisse sind georeferenzierte Rasterbilder. Wenn diese rein anschaulichen Zwecken dienen sollen, können sie mit folgenden Tricks verkleinert werden. Dazu ist auch <a href="http://blog.cleverelephant.ca/2015/02/geotiff-compression-for-dummies.html">dieser Blogpost</a> sehr lesenswert.
+
+      <pre><code>
+
+  # extract 3 bands out of grass single band palette composite:
+  gdal_translate -a_srs EPSG:${EPSG} -co COMPRESS=DEFLATE -co BIGTIFF=YES -expand rgb composite.tif composite_expand.tif
+
+  # do the magic image compression
+  gdal_translate -co COMPRESS=JPEG -co TILED=YES -ot Byte -co PHOTOMETRIC=YCBCR composite_expand.tif composite_small.tif
+
+  # calculating overviews
+  gdaladdo --config COMPRESS_OVERVIEW JPEG --config PHOTOMETRIC_OVERVIEW YCBCR --config INTERLEAVE_OVERVIEW PIXEL -r average composite_small.tif 2 4 8 16
+
+      </code></pre>
+
+</br></br>
+      <h3>Weiterführend:</h3>
+
+      <ul>
+        <li>Zeitreihenanalysen:
+          <ul>
+            <li><a href="https://grasswiki.osgeo.org/wiki/Temporal_data_processing#Filling_and_reconstructing_time_series_data_with_gaps">Filling_and_reconstructing_time_series_data_with_gaps</a></li>
+            <li><a href="http://scientificpubs.com/grassgis_tutorial/time_series_exercise.html">Time Series</a></li>
+          </ul>
+        </li>
+      </ul>
+
+</br></br></br></br>
+
+      <h2>Vielen Dank für Ihre Aufmerksamkeit! Fragen?</h2>
+
+    </main>
+  </body>
+</html>

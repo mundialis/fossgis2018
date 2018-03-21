@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>mundialis FOSSGIS 2018 - workshop - open data mit open source</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="../index.css">
+  <link rel="stylesheet" href="resources/open_data_mit_open_source.css">
+
+  <link rel="shortcut icon" href="../resources/img/mundialis_bildmarke_web.ico" type="image/x-icon" />
+  <script src="../resources/js/toggle_nav.js" ></script>
+  <script src="../resources/js/w3data.js"></script>
+
+</head>
+<body>
+  <a href="https://www.mundialis.de"><img id="logo" src="../resources/img/mundialis_logo.png" alt="Logo from mundialis" width="100" /></a>
+  <button class="navbtn" onclick="toogleNav()"></button>
+
+  <div w3-include-html="html-includes/nav.html"></div>
+  <script>w3IncludeHTML();</script>
+
+  <main>
+    <h1 class="title">Open data mit Open source - Prozessierung von Copernicus Daten mit freier (Kommandozeilen-) Software</h1>
+    <h2>mit den Daten arbeiten</h2>
+
+    <p>In diesem Schritt berechnen wir einen Index. Dazu importieren wir die benötigten Bänder in GRASS GIS. Mögliche Indizes können <a href="https://www.sentinel-hub.com/eotaxonomy/indices?page=1">hier</a> gefunden werden. In diesem Beispiel berechnen wir den <b>RE-NDWI (Red Edge - Normalized Difference Water Index) </br></br>
+    [(B03 - B05) / (B03 + B05)]</b></p>
+
+    <p>Je nach Rechenleistung kann die komplette Szene oder das Subset verwendet werden. Folgend verwenden wir das Subset.</p>
+
+    <pre><code>
+      ##########################################################################
+      # Prepare (skip if already done)
+      ##########################################################################
+
+      # prepare working directory
+      WORK_DIR=/home/user/Desktop/open_data_mit_open_source/
+      mkdir -p ${WORK_DIR}
+      cd ${WORK_DIR}
+
+      # set GRASS GIS executable
+      GRASS=grass74
+      GRASS_WORK_DIR=~/grassdata/s2_bonn
+      # incomment to always overwrite
+      #export GRASS_OVERWRITE=1
+      ${GRASS} --version
+
+      ##########################################################################
+      # Prepare other subsets
+      ##########################################################################
+
+      BAND_A=03
+      BAND_B=05
+
+      # CAUTION with resolution in path (e.g. 10m, 20m, ..) !
+
+      gdal_translate -of VRT -projwin 350000 5640000 378000 5615000 ${L2A}/GRANULE/L2A_T32ULB_A010401_20170619T103021/IMG_DATA/R10m/L2A_T32ULB_20170619T103021_B${BAND_A}_10m.jp2 L2A_B${BAND_A}_subset.vrt
+
+      gdal_translate -of VRT -projwin 350000 5640000 378000 5615000 ${L2A}/GRANULE/L2A_T32ULB_A010401_20170619T103021/IMG_DATA/R20m/L2A_T32ULB_20170619T103021_B${BAND_B}_20m.jp2 L2A_B${BAND_B}_subset.vrt
+
+      ##########################################################################
+      # Prepare classes and colormap
+      ##########################################################################
+
+      curl https://mundialis.github.io/fossgis2018/open_data_mit_open_source/processing/0305.class > 0305.class
+      curl https://mundialis.github.io/fossgis2018/open_data_mit_open_source/processing/0305.colors > 0305.colors
+
+      ##########################################################################
+      # Prepare composite
+      ##########################################################################
+
+      # set band for import
+      L2A=S2A_MSIL2A_20170619T103021_N0205_R108_T32ULB_20170619T103021.SAFE
+      BAND_A_SUB=L2A_B${BAND_A}_subset.vrt
+      BAND_B_SUB=L2A_B${BAND_B}_subset.vrt
+
+      export WORK_DIR=${WORK_DIR}
+      export GRASS=${GRASS}
+      export GRASS_WORK_DIR=${GRASS_WORK_DIR}
+      export L2A=${L2A}
+      export BAND_A_SUB=${BAND_A_SUB}
+      export BAND_B_SUB=${BAND_B_SUB}
+      export BAND_A=${BAND_A}
+      export BAND_B=${BAND_B}
+
+      ##########################################################################
+      # Import 2 bands for an index
+      ##########################################################################
+
+      # Connect to GRASS GIS location
+      ${GRASS} ${GRASS_WORK_DIR}/PERMANENT -text
+
+      # import with r.in.gdal
+      r.in.gdal -o ${BAND_A_SUB} out=BAND_${BAND_A}
+      r.in.gdal -o ${BAND_B_SUB} out=BAND_${BAND_B}
+
+      # list imported layers
+      g.list type=raster
+      # should look like this:
+      #BAND_03
+      #BAND_04
+      #BAND_05
+      #BAND_BLUE
+      #BAND_GREEN
+      #BAND_RED
+      #L2A_T32ULB_20170619T103021_B04_10m
+      #L2A_T32ULB_20170619T103021_B04_20m
+      #L2A_T32ULB_20170619T103021_B04_60m
+      #composite
+
+      ##########################################################################
+      # Create the index
+      ##########################################################################
+
+      # A long list of vegetation and water indices is already prepared:
+      # see https://grass.osgeo.org/grass74/manuals/i.vi.html for i.vi
+      # and https://grass.osgeo.org/grass7/manuals/addons/i.wi.html for i.wi
+
+      r.mapcalc "index = 1.0 * (BAND_${BAND_A} - BAND_${BAND_B})/(BAND_${BAND_A} + BAND_${BAND_B})"
+
+      # we prepared some files for you
+      # see https://mundialis.github.io/fossgis2018/open_data_mit_open_source/processing/
+
+      r.recode input=index output=index_class rules=${WORK_DIR}/${BAND_A}${BAND_B}.class
+      r.colors map=index_class rules=${WORK_DIR}/${BAND_A}${BAND_B}.colors
+
+      r.out.gdal -m input=index_class output=${WORK_DIR}/index.tif createopt="COMPRESS=DEFLATE,PHOTOMETRIC=RGB"
+
+    </pre></code>
+
+
+  </main>
+</body>
+</html>

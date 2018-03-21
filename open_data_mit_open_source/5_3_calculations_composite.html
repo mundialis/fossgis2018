@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>mundialis FOSSGIS 2018 - workshop - open data mit open source</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="../index.css">
+  <link rel="stylesheet" href="resources/open_data_mit_open_source.css">
+
+  <link rel="shortcut icon" href="../resources/img/mundialis_bildmarke_web.ico" type="image/x-icon" />
+  <script src="../resources/js/toggle_nav.js" ></script>
+  <script src="../resources/js/w3data.js"></script>
+
+</head>
+<body>
+  <a href="https://www.mundialis.de"><img id="logo" src="../resources/img/mundialis_logo.png" alt="Logo from mundialis" width="100" /></a>
+  <button class="navbtn" onclick="toogleNav()"></button>
+
+  <div w3-include-html="html-includes/nav.html"></div>
+  <script>w3IncludeHTML();</script>
+
+  <main>
+    <h1 class="title">Open data mit Open source - Prozessierung von Copernicus Daten mit freier (Kommandozeilen-) Software</h1>
+    <h2>mit den Daten arbeiten</h2>
+
+    <p>In diesem Schritt erstellen wir entweder eine Echtfarbenkomposition, oder eine Falschfarbenkomposition. Dazu importieren wir drei Bänder in GRASS GIS. Für eine Echtfarbenkomposition sind das B04, B03 und B02. Für eine Falschfarbenkomposition sind das die Bänder B08, B04 und B03.</p>
+
+    <p>Je nach Rechenleistung kann die komplette Szene oder das Subset verwendet werden. Folgend verwenden wir das Subset.</p>
+
+    <pre><code>
+      ##########################################################################
+      # Prepare (skip if already done)
+      ##########################################################################
+
+      # prepare working directory
+      WORK_DIR=/home/user/Desktop/open_data_mit_open_source/
+      mkdir -p ${WORK_DIR}
+      cd ${WORK_DIR}
+      export WORK_DIR=${WORK_DIR}
+
+      # set GRASS GIS executable
+      GRASS=grass74
+      GRASS_WORK_DIR=~/grassdata/s2_bonn
+      # incomment to always overwrite
+      #export GRASS_OVERWRITE=1
+      ${GRASS} --version
+
+      ##########################################################################
+      # Prepare other subsets
+      ##########################################################################
+
+      L2A_B08=${L2A}/GRANULE/L2A_T32ULB_A010401_20170619T103021/IMG_DATA/R10m/L2A_T32ULB_20170619T103021_B08_10m.jp2
+      gdal_translate -of VRT -projwin 350000 5640000 378000 5615000 ${L2A_B08} L2A_B08_subset.vrt
+
+      L2A_B03=${L2A}/GRANULE/L2A_T32ULB_A010401_20170619T103021/IMG_DATA/R10m/L2A_T32ULB_20170619T103021_B03_10m.jp2
+      gdal_translate -of VRT -projwin 350000 5640000 378000 5615000 ${L2A_B03} L2A_B03_subset.vrt
+
+      L2A_B02=${L2A}/GRANULE/L2A_T32ULB_A010401_20170619T103021/IMG_DATA/R10m/L2A_T32ULB_20170619T103021_B02_10m.jp2
+      gdal_translate -of VRT -projwin 350000 5640000 378000 5615000 ${L2A_B02} L2A_B02_subset.vrt
+
+      ##########################################################################
+      # Prepare composite
+      ##########################################################################
+
+      # set band for import
+      L2A=S2A_MSIL2A_20170619T103021_N0205_R108_T32ULB_20170619T103021.SAFE
+      BAND_RED=L2A_B04_subset.vrt
+      BAND_GREEN=L2A_B03_subset.vrt
+      BAND_BLUE=L2A_B02_subset.vrt
+
+      export GRASS=${GRASS}
+      export GRASS_WORK_DIR=${GRASS_WORK_DIR}
+      export L2A=${L2A}
+      export BAND_RED=${BAND_RED}
+      export BAND_GREEN=${BAND_GREEN}
+      export BAND_BLUE=${BAND_BLUE}
+
+      ##########################################################################
+      # Import 3 bands for a composite
+      ##########################################################################
+
+      # Connect to GRASS GIS location
+      ${GRASS} ${GRASS_WORK_DIR}/PERMANENT -text
+
+      # import with r.in.gdal
+      r.in.gdal -o ${BAND_RED} out=BAND_RED
+      r.in.gdal -o ${BAND_GREEN} out=BAND_GREEN
+      r.in.gdal -o ${BAND_BLUE} out=BAND_BLUE
+
+      # list imported layers
+      g.list type=raster
+      # should look like this:
+      #BAND_04
+      #BAND_BLUE
+      #BAND_GREEN
+      #BAND_RED
+      #L2A_T32ULB_20170619T103021_B04_10m
+      #L2A_T32ULB_20170619T103021_B04_20m
+      #L2A_T32ULB_20170619T103021_B04_60m
+
+      ##########################################################################
+      # Create the composite
+      ##########################################################################
+
+      # Option: For smaller filesize: rescale to byte
+      #r.rescale input=BAND_RED output=BAND_RED_255 to=0,255
+
+      i.colors.enhance r=BAND_RED g=BAND_GREEN b=BAND_BLUE strength=98
+      r.composite red=BAND_RED green=BAND_GREEN blue=BAND_BLUE output=composite
+
+      r.out.gdal -m input=composite output=${WORK_DIR}/composite.tif createopt="COMPRESS=DEFLATE"
+
+    </code></pre>
+
+  </main>
+</body>
+</html>

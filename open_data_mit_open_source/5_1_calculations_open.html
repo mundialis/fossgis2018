@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>mundialis FOSSGIS 2018 - workshop - open data mit open source</title>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" href="../index.css">
+  <link rel="stylesheet" href="resources/open_data_mit_open_source.css">
+
+  <link rel="shortcut icon" href="../resources/img/mundialis_bildmarke_web.ico" type="image/x-icon" />
+  <script src="../resources/js/toggle_nav.js" ></script>
+  <script src="../resources/js/w3data.js"></script>
+
+</head>
+<body>
+  <a href="https://www.mundialis.de"><img id="logo" src="../resources/img/mundialis_logo.png" alt="Logo from mundialis" width="100" /></a>
+  <button class="navbtn" onclick="toogleNav()"></button>
+
+  <div w3-include-html="html-includes/nav.html"></div>
+  <script>w3IncludeHTML();</script>
+
+  <main>
+    <h1 class="title">Open data mit Open source - Prozessierung von Copernicus Daten mit freier (Kommandozeilen-) Software</h1>
+    <h2>mit den Daten arbeiten</h2>
+
+    <p>Das ist ein Datensatz im SAFE-Format. Wo sind die Daten?</p>
+
+    <!--<pre><code>
+    S2A_MSIL2A_20170619T103021_N0205_R108_T32ULB_20170619T103021.SAFE/
+    ├── AUX_DATA
+    ├── DATASTRIP
+    │   └── DS_SGS__20170619T141601_S20170619T103021
+    │       ├── MTD_DS.xml
+    │       └── QI_DATA
+    ├── GRANULE
+    │   └── L2A_T32ULB_A010401_20170619T103021
+    │       ├── AUX_DATA
+    │       │   ├── AUX_ECMWFT
+    │       │   └── GIP_TL.xml
+    │       ├── IMG_DATA
+    │       │   ├── R10m
+    │       │   │   ├── L2A_T32ULB_20170619T103021_AOT_10m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_B02_10m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_B03_10m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_B04_10m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_B08_10m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_TCI_10m.jp2
+    │       │   │   └── L2A_T32ULB_20170619T103021_WVP_10m.jp2
+    │       │   ├── R20m
+    │       │   │   ├── L2A_T32ULB_20170619T103021_AOT_20m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_B02_20m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_B03_20m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_B04_20m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_B05_20m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_B06_20m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_B07_20m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_B11_20m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_B12_20m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_B8A_20m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_SCL_20m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_TCI_20m.jp2
+    │       │   │   ├── L2A_T32ULB_20170619T103021_VIS_20m.jp2
+    │       │   │   └── L2A_T32ULB_20170619T103021_WVP_20m.jp2
+    │       │   └── R60m
+    │       │       ├── L2A_T32ULB_20170619T103021_AOT_60m.jp2
+    │       │       ├── L2A_T32ULB_20170619T103021_B01_60m.jp2
+    │       │       ├── L2A_T32ULB_20170619T103021_B02_60m.jp2
+    │       │       ├── L2A_T32ULB_20170619T103021_B03_60m.jp2
+    │       │       ├── L2A_T32ULB_20170619T103021_B04_60m.jp2
+    │       │       ├── L2A_T32ULB_20170619T103021_B05_60m.jp2
+    │       │       ├── L2A_T32ULB_20170619T103021_B06_60m.jp2
+    │       │       ├── L2A_T32ULB_20170619T103021_B07_60m.jp2
+    │       │       ├── L2A_T32ULB_20170619T103021_B09_60m.jp2
+    │       │       ├── L2A_T32ULB_20170619T103021_B11_60m.jp2
+    │       │       ├── L2A_T32ULB_20170619T103021_B12_60m.jp2
+    │       │       ├── L2A_T32ULB_20170619T103021_B8A_60m.jp2
+    │       │       ├── L2A_T32ULB_20170619T103021_SCL_60m.jp2
+    │       │       ├── L2A_T32ULB_20170619T103021_TCI_60m.jp2
+    │       │       └── L2A_T32ULB_20170619T103021_WVP_60m.jp2
+    │       ├── MTD_TL.xml
+    │       └── QI_DATA
+    │           ├── L2A_T32ULB_20170619T103021_CLD_20m.jp2
+    │           ├── L2A_T32ULB_20170619T103021_CLD_60m.jp2
+    │           ├── L2A_T32ULB_20170619T103021_PVI.jp2
+    │           ├── L2A_T32ULB_20170619T103021_SNW_20m.jp2
+    │           ├── L2A_T32ULB_20170619T103021_SNW_60m.jp2
+    │           ├── MSK_CLOUDS_B00.gml
+    │           ├── MSK_DEFECT_B01.gml
+    │           ├── MSK_DEFECT_B02.gml
+    │           ├── MSK_DEFECT_B03.gml
+    │           ├── MSK_DEFECT_B04.gml
+    │           ├── MSK_DEFECT_B05.gml
+    │           ├── MSK_DEFECT_B06.gml
+    │           ├── MSK_DEFECT_B07.gml
+    │           ├── MSK_DEFECT_B08.gml
+    │           ├── MSK_DEFECT_B09.gml
+    │           ├── MSK_DEFECT_B10.gml
+    │           ├── MSK_DEFECT_B11.gml
+    │           ├── MSK_DEFECT_B12.gml
+    │           ├── MSK_DEFECT_B8A.gml
+    │           ├── MSK_DETFOO_B01.gml
+    │           ├── MSK_DETFOO_B02.gml
+    │           ├── MSK_DETFOO_B03.gml
+    │           ├── MSK_DETFOO_B04.gml
+    │           ├── MSK_DETFOO_B05.gml
+    │           ├── MSK_DETFOO_B06.gml
+    │           ├── MSK_DETFOO_B07.gml
+    │           ├── MSK_DETFOO_B08.gml
+    │           ├── MSK_DETFOO_B09.gml
+    │           ├── MSK_DETFOO_B10.gml
+    │           ├── MSK_DETFOO_B11.gml
+    │           ├── MSK_DETFOO_B12.gml
+    │           ├── MSK_DETFOO_B8A.gml
+    │           ├── MSK_NODATA_B01.gml
+    │           ├── MSK_NODATA_B02.gml
+    │           ├── MSK_NODATA_B03.gml
+    │           ├── MSK_NODATA_B04.gml
+    │           ├── MSK_NODATA_B05.gml
+    │           ├── MSK_NODATA_B06.gml
+    │           ├── MSK_NODATA_B07.gml
+    │           ├── MSK_NODATA_B08.gml
+    │           ├── MSK_NODATA_B09.gml
+    │           ├── MSK_NODATA_B10.gml
+    │           ├── MSK_NODATA_B11.gml
+    │           ├── MSK_NODATA_B12.gml
+    │           ├── MSK_NODATA_B8A.gml
+    │           ├── MSK_SATURA_B01.gml
+    │           ├── MSK_SATURA_B02.gml
+    │           ├── MSK_SATURA_B03.gml
+    │           ├── MSK_SATURA_B04.gml
+    │           ├── MSK_SATURA_B05.gml
+    │           ├── MSK_SATURA_B06.gml
+    │           ├── MSK_SATURA_B07.gml
+    │           ├── MSK_SATURA_B08.gml
+    │           ├── MSK_SATURA_B09.gml
+    │           ├── MSK_SATURA_B10.gml
+    │           ├── MSK_SATURA_B11.gml
+    │           ├── MSK_SATURA_B12.gml
+    │           ├── MSK_SATURA_B8A.gml
+    │           ├── MSK_TECQUA_B01.gml
+    │           ├── MSK_TECQUA_B02.gml
+    │           ├── MSK_TECQUA_B03.gml
+    │           ├── MSK_TECQUA_B04.gml
+    │           ├── MSK_TECQUA_B05.gml
+    │           ├── MSK_TECQUA_B06.gml
+    │           ├── MSK_TECQUA_B07.gml
+    │           ├── MSK_TECQUA_B08.gml
+    │           ├── MSK_TECQUA_B09.gml
+    │           ├── MSK_TECQUA_B10.gml
+    │           ├── MSK_TECQUA_B11.gml
+    │           ├── MSK_TECQUA_B12.gml
+    │           ├── MSK_TECQUA_B8A.gml
+    │           └── T32ULB_20170619T103021_PVI.jp2
+    ├── HTML
+    │   ├── banner_1.png
+    │   ├── banner_2.png
+    │   ├── banner_3.png
+    │   ├── star_bg.jpg
+    │   ├── UserProduct_index.html
+    │   └── UserProduct_index.xsl
+    ├── INSPIRE.xml
+    ├── L2A_Manifest.xml
+    ├── manifest.safe
+    ├── MTD_MSIL2A.xml
+    ├── rep_info
+    │   ├── S2_PDI_Level-2A_Datastrip_Metadata.xsd
+    │   ├── S2_PDI_Level-2A_Tile_Metadata.xsd
+    │   └── S2_User_Product_Level-2A_Metadata.xsd
+    └── S2A_MSIL2A_20170619T103021_N0205_R108_T32ULB_20170619T103021_20170622T062605_report.xml
+
+    14 directories, 126 files
+  </pre></code>-->
+
+  <h3>GDAL</h3>
+
+  <p>Was ist <a href="http://www.gdal.org/">GDAL</a>?</p>
+  <blockquote>GDAL is a translator library for raster and vector geospatial data formats</blockquote>
+
+  <p>GDAL bietet viele verschiedene allgemeine <a href="http://www.gdal.org/gdal_utilities.html">Werkzeuge</a> und <a href="http://www.gdal.org/frmt_sentinel2.html">Treiber</a> für Sentinel-2.</p>
+
+  <pre><code>
+    ############################################################################
+    # Prepare data
+    ############################################################################
+
+    # prepare working directory
+    WORK_DIR=/home/user/Desktop/open_data_mit_open_source/
+    mkdir -p ${WORK_DIR}
+    cd ${WORK_DIR}
+
+    # extract data
+    unzip S2A_MSIL1C_20170619T103021_N0205_R108_T32ULB_20170619T103021.zip
+    unzip S2A_MSIL2A_20170619T103021_N0205_R108_T32ULB_20170619T103021.zip
+
+    # set Level 1C
+    L1C=S2A_MSIL1C_20170619T103021_N0205_R108_T32ULB_20170619T103021.SAFE
+    echo $L1C
+
+    # set Level 2A
+    L2A=S2A_MSIL2A_20170619T103021_N0205_R108_T32ULB_20170619T103021.SAFE
+    echo $L2A
+
+    # set single band
+    L2A_B04=${L2A}/GRANULE/L2A_T32ULB_A010401_20170619T103021/IMG_DATA/R10m/L2A_T32ULB_20170619T103021_B04_10m.jp2
+
+
+    ############################################################################
+    # Retrieve information with GDAL
+    ############################################################################
+
+    # set gdal cache higher to calculate faster
+    export GDAL_CACHEMAX=2000
+
+    gdalinfo --version
+
+    # retrieve information about full Level 1C Product
+    gdalinfo ${L1C}/MTD_MSIL1C.xml
+
+    # retrieve information about 10m Level 1C Products
+    cd ${L1C}
+    gdalinfo "SENTINEL2_L1C:MTD_MSIL1C.xml:10m:EPSG_32632"
+    cd ..
+
+    # retrieve information about full Level 2A Product
+    gdalinfo ${L2A}/MTD_MSIL2A.xml
+
+    # retrieve information about single Level 2A Band
+    gdalinfo ${L2A_B04}
+
+
+    ############################################################################
+    # Manipulate data with GDAL
+    ############################################################################
+
+    # Create Virtual Raster. -projwin ulx uly lrx lry
+    gdal_translate -of VRT -projwin 350000 5640000 378000 5615000 ${L2A_B04} L2A_B04_subset.vrt
+
+  </code></pre>
+
+  <!--RES=10
+  # Use -r bilinear only with INT input: here yes
+  # JP2 -> TIF, deflate compressed
+  warpparams="-t_srs EPSG:${EPSG} -tr ${RES} ${RES} -r bilinear -srcnodata 0 -co COMPRESS=DEFLATE -co BIGTIFF=YES"
+  gdalwarp ${warpparams} ${BAND_RED_INPUT} ${BAND_RED}-->
+
+
+
+</main>
+</body>
+</html>
